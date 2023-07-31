@@ -1,11 +1,9 @@
 package com.polarbookshop.edgeservice.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.polarbookshop.edgeservice.config.SecurityConfig;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -14,9 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.reactive.server.WebTestClientConfigurer;
 
 @WebFluxTest(UserController.class)
 @Import(SecurityConfig.class)
@@ -55,6 +51,7 @@ class UserControllerTests {
           builder.claim(StandardClaimNames.PREFERRED_USERNAME, expectedUser.username());
           builder.claim(StandardClaimNames.GIVEN_NAME, expectedUser.firstName());
           builder.claim(StandardClaimNames.FAMILY_NAME, expectedUser.lastName());
+          builder.claim("roles", expectedUser.roles());
         });
   }
 }
