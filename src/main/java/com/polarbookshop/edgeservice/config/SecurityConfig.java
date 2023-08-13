@@ -28,9 +28,10 @@ public class SecurityConfig {
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity,
       ReactiveClientRegistrationRepository clientRegistrationRepository) {
     return httpSecurity.authorizeExchange(exchange -> exchange
-                .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
-                .pathMatchers(HttpMethod.GET, "/books/**").permitAll()
-                .anyExchange().authenticated()
+            .pathMatchers("/actuator/**").permitAll()
+            .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
+            .pathMatchers(HttpMethod.GET, "/books/**").permitAll()
+            .anyExchange().authenticated()
         )
         .exceptionHandling(exceptionHandling -> exceptionHandling
             .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -39,7 +40,7 @@ public class SecurityConfig {
         .logout(logoutSpec -> logoutSpec.logoutSuccessHandler(
             oidcLogoutSuccessHandler(clientRegistrationRepository)))
         .csrf(csrfSpec -> csrfSpec.csrfTokenRepository(
-            CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                CookieServerCsrfTokenRepository.withHttpOnlyFalse())
             .csrfTokenRequestHandler(new XorServerCsrfTokenRequestAttributeHandler()::handle))
         .build();
   }

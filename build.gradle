@@ -18,9 +18,11 @@ repositories {
 ext {
     set('springCloudVersion', "2022.0.3")
     set('testcontainersVersion', '1.17.3')
+    set('otelVersion', "1.26.0")
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -28,6 +30,9 @@ dependencies {
     implementation 'org.springframework.session:spring-session-data-redis'
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    runtimeOnly 'io.github.resilience4j:resilience4j-micrometer'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    runtimeOnly "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:junit-jupiter'
@@ -55,4 +60,8 @@ bootBuildImage {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+springBoot {
+    buildInfo()
 }
